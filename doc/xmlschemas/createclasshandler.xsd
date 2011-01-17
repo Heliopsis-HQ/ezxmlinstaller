@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"
+    elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5">
+    <element name="CreateClass">
+        <complexType>
+            <sequence>
+                <element name="ContentClass" type="ezcrcl:ContentClassType"
+                    minOccurs="1" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="ContentClassType">
+        <sequence>
+            <element name="Names" maxOccurs="1" minOccurs="1"
+                type="ezcrcl:NamesComplexType">
+            </element>
+            <element name="Groups" maxOccurs="1" minOccurs="1">
+                <complexType>
+                    <sequence>
+                        <element name="Group" type="ezcrcl:GroupType"
+                            maxOccurs="unbounded" minOccurs="0">
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="Attributes" maxOccurs="1" minOccurs="0">
+                <complexType>
+                    <sequence>
+                        <element ref="ezcrcl:Attribute"
+                            maxOccurs="unbounded" minOccurs="1">
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+        </sequence>
+        <attribute name="identifier" use="optional" type="string">
+        </attribute>
+        <attribute name="remoteID" type="string" use="optional"></attribute>
+        <attribute name="objectNamePattern" type="string"
+            use="optional">
+        </attribute>
+        <attribute name="referenceID" type="string" use="optional"></attribute>
+        <attribute name="classExistAction" use="optional">
+            <simpleType>
+                <restriction base="string">
+                    <enumeration value="replace"></enumeration>
+                    <enumeration value="new"></enumeration>
+                    <enumeration value="extend"></enumeration>
+                    <enumeration value="skip"></enumeration>
+                </restriction>
+            </simpleType>
+        </attribute>
+        <attribute name="urlAliasPattern" type="string"
+            use="optional">
+        </attribute>
+        <attribute name="isContainer" type="boolean" use="optional"
+            default="false">
+        </attribute>
+    </complexType>
+
+
+    <complexType name="GroupType">
+        <attribute name="name" type="string" use="required"></attribute>
+    </complexType>
+
+
+    <element name="Attribute" type="ezcrcl:AttributeType"></element>
+
+    <complexType name="AttributeType">
+        <sequence>
+            <element ref="ezcrcl:Names" maxOccurs="1" minOccurs="0"></element>
+            <element name="DatatypeParameters" maxOccurs="1"
+                minOccurs="1">
+                <complexType>
+                    <sequence>
+                        <any maxOccurs="1" minOccurs="0"></any>
+                    </sequence>
+                </complexType>
+            </element>
+        </sequence>
+        <attribute name="datatype" type="string" use="required"></attribute>
+        <attribute name="required" type="boolean" default="false"></attribute>
+        <attribute name="identifier" type="string" use="required"></attribute>
+        <attribute name="searchable" type="boolean" default="false"></attribute>
+        <attribute name="informationCollector" type="boolean"
+            default="false">
+        </attribute>
+        <attribute name="translatable" type="boolean" default="true"></attribute>
+        <attribute name="placement" type="int" use="optional"></attribute>
+    </complexType>
+
+    <element name="Names" type="ezcrcl:NamesComplexType"></element>
+    <complexType name="NamesComplexType">
+        <sequence></sequence>
+        <attribute name="fre-FR" type="string" use="optional"></attribute>
+        <attribute name="eng-GB" type="string" use="optional"></attribute>
+        <anyAttribute></anyAttribute>
+    </complexType>
+</schema>
