@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ez.no/URI/xmlinstaller/0.1.5"
+	xmlns:tns="http://ez.no/URI/xmlinstaller/0.1.5"
+	elementFormDefault="qualified"
+	xmlns:pi="http://ez.no/URI/xmlinstaller/handlers/ezproccessinstruction/0.1.5"
+	xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5">
+
+	<import schemaLocation="proccessinstructionhandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezproccessinstruction/0.1.5"></import>
+    <import schemaLocation="createclasshandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"></import>
+	<element name="eZXMLImporter">
+		<complexType>
+			<sequence>
+				<element ref="ezcrcl:CreateClass" maxOccurs="unbounded"
+					minOccurs="0">
+				</element>
+				<element ref="pi:ProccessInformation"
+					maxOccurs="unbounded" minOccurs="0">
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+</schema>
