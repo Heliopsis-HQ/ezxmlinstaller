@@ -14,7 +14,7 @@
 
     <complexType name="ContentClassType">
         <sequence>
-            <element name="Names" maxOccurs="1" minOccurs="1"
+            <element name="Names" maxOccurs="1" minOccurs="0"
                 type="ezcrcl:NamesComplexType">
             </element>
             <element name="Groups" maxOccurs="1" minOccurs="1">
@@ -73,7 +73,7 @@
         <sequence>
             <element ref="ezcrcl:Names" maxOccurs="1" minOccurs="0"></element>
             <element name="DatatypeParameters" maxOccurs="1"
-                minOccurs="1">
+                minOccurs="0">
                 <complexType>
                     <sequence>
                         <any maxOccurs="1" minOccurs="0"></any>
@@ -94,7 +94,6 @@
 
     <element name="Names" type="ezcrcl:NamesComplexType"></element>
     <complexType name="NamesComplexType">
-        <sequence></sequence>
         <attribute name="fre-FR" type="string" use="optional"></attribute>
         <attribute name="eng-GB" type="string" use="optional"></attribute>
         <anyAttribute></anyAttribute>
