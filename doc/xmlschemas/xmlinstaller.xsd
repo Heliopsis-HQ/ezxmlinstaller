@@ -10,14 +10,15 @@
     <import schemaLocation="createclasshandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"></import>
 	<element name="eZXMLImporter">
 		<complexType>
-			<sequence>
+			<choice maxOccurs="unbounded" minOccurs="1">
 				<element ref="ezcrcl:CreateClass" maxOccurs="unbounded"
 					minOccurs="0">
 				</element>
 				<element ref="pi:ProccessInformation"
 					maxOccurs="unbounded" minOccurs="0">
 				</element>
-			</sequence>
+				<any namespace="##other"></any>
+			</choice>
 		</complexType>
 	</element>
 
