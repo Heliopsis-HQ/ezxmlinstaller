@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreaterole/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezcrro="http://ez.no/URI/xmlinstaller/handlers/ezcreaterole/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+
+
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+	<element name="CreateRole">
+		<complexType>
+			<sequence>
+				<element ref="ezcrro:Role" maxOccurs="unbounded"
+					minOccurs="1">
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="Role" type="ezcrro:RoleType"></element>
+
+	<complexType name="RoleType">
+		<sequence>
+			<element ref="ezcrro:Policy" maxOccurs="unbounded"
+				minOccurs="1">
+			</element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="createRole" type="boolean" use="optional"
+			default="false">
+		</attribute>
+		<attribute name="replacePolicies" type="boolean" use="optional"
+			default="false">
+		</attribute>
+		<attribute name="referenceID" type="ezxmlinst:referenceIDName" use="optional"></attribute>
+	</complexType>
+
+	<element name="Policy" type="ezcrro:PolicyType"></element>
+
+	<complexType name="PolicyType">
+		<sequence>
+			<element name="Limitations" maxOccurs="1" minOccurs="0"
+				type="ezcrro:LimitationsComplexType">
+			</element>
+		</sequence>
+		<attribute name="module" type="string" use="required"></attribute>
+		<attribute name="function" type="string" use="required"></attribute>
+	</complexType>
+	<complexType name="LimitationsComplexType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element name="Class" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="ParentClass" type="string" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="Section" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Status" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Language" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Owner" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="ParentOwner" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Group" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="ParentGroup" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="ParentDepth" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Node" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<element name="Subtree" type="string" minOccurs="0"
+				maxOccurs="1">
+			</element>
+			<any></any>
+		</choice>
+	</complexType>
+</schema>
