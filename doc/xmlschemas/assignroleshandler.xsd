@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezassignroles/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezasro="http://ez.no/URI/xmlinstaller/handlers/ezassignroles/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+	<element name="AssignRoles">
+		<complexType>
+			<sequence>
+				<element name="RoleAssignment"
+					type="ezasro:RoleAssignmentType" maxOccurs="unbounded"
+					minOccurs="1">
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="RoleAssignmentType">
+		<attribute name="roleID" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="assignTo" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="sectionLimitation" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="subtreeLimitation" type="ezxmlinst:referenceID"></attribute>
+	</complexType>
+</schema>
