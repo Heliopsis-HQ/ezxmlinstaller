@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatesection/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5" xmlns:ezcrse="http://ez.no/URI/xmlinstaller/handlers/ezcreatesection/0.1.5">
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+
+	<element name="CreateSection">
+		<complexType>
+			<attribute name="sectionName" type="string" use="required"></attribute>
+			<attribute name="navigationPart" type="string" use="required"></attribute>
+			<attribute name="referenceID" type="ezxmlinst:referenceIDName"></attribute>
+		</complexType>
+	</element>
+</schema>
