@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema 
-    targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"
-    elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
-    xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5">
-    <element name="CreateClass">
-        <complexType>
-            <sequence>
-                <element name="ContentClass" type="ezcrcl:ContentClassType"
-                    minOccurs="1" maxOccurs="unbounded" />
-            </sequence>
-        </complexType>
-    </element>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+	<element name="CreateClass">
+		<complexType>
+			<sequence>
+				<element name="ContentClass"
+					type="ezcrcl:ContentClassType" minOccurs="1" maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+	</element>
 
     <complexType name="ContentClassType">
         <sequence>
@@ -42,7 +43,7 @@
         <attribute name="objectNamePattern" type="string"
             use="optional">
         </attribute>
-        <attribute name="referenceID" type="string" use="optional"></attribute>
+        <attribute name="referenceID" type="ezxmlinst:referenceIDName" use="optional"></attribute>
         <attribute name="classExistAction" use="optional">
             <simpleType>
                 <restriction base="string">
@@ -62,12 +63,12 @@
     </complexType>
 
 
-    <complexType name="GroupType">
-        <attribute name="name" type="string" use="required"></attribute>
-    </complexType>
+	<complexType name="GroupType">
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
 
 
-    <element name="Attribute" type="ezcrcl:AttributeType"></element>
+	<element name="Attribute" type="ezcrcl:AttributeType"></element>
 
     <complexType name="AttributeType">
         <sequence>

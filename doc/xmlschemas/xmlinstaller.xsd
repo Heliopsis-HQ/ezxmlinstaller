@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://ez.no/URI/xmlinstaller/0.1.5"
-	xmlns:tns="http://ez.no/URI/xmlinstaller/0.1.5"
 	elementFormDefault="qualified"
-	xmlns:pi="http://ez.no/URI/xmlinstaller/handlers/ezproccessinstruction/0.1.5"
-	xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5">
+    xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5"
+	xmlns:ezpi="http://ez.no/URI/xmlinstaller/handlers/ezproccessinstruction/0.1.5"
+	xmlns:ezcrcl="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"
+    xmlns:ezcrro="http://ez.no/URI/xmlinstaller/handlers/ezcreaterole/0.1.5"
+    xmlns:ezasro="http://ez.no/URI/xmlinstaller/handlers/ezassignroles/0.1.5"
+    >
 
 	<import schemaLocation="proccessinstructionhandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezproccessinstruction/0.1.5"></import>
     <import schemaLocation="createclasshandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateclass/0.1.5"></import>
+    <import schemaLocation="createrolehandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreaterole/0.1.5"></import>
+    <import schemaLocation="assignroleshandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezassignroles/0.1.5"></import>
 	<element name="eZXMLImporter">
 		<complexType>
-			<choice maxOccurs="unbounded" minOccurs="1">
-				<element ref="ezcrcl:CreateClass" maxOccurs="unbounded"
-					minOccurs="0">
+			<choice minOccurs="1" maxOccurs="unbounded">
+				<element ref="ezcrcl:CreateClass" 
+				    maxOccurs="unbounded" minOccurs="0">
 				</element>
-				<element ref="pi:ProccessInformation"
+				<element ref="ezpi:ProccessInformation"
 					maxOccurs="unbounded" minOccurs="0">
 				</element>
 				<any namespace="##other"></any>
+                <element ref="ezcrro:CreateRole"
+                    maxOccurs="unbounded" minOccurs="0">
+                </element>
+                <element ref="ezasro:AssignRoles"
+                    maxOccurs="unbounded" minOccurs="0">
+                </element>
 			</choice>
 		</complexType>
 	</element>
 
+
+	<simpleType name="referenceID">
+		<restriction base="string">
+		    <pattern value="internal:[\w-_]+"></pattern>
+			<pattern value="(node_id|object_id):\d+"></pattern>
+            <pattern value="(remote_id|remote_node_id):[\w-_]+"></pattern>
+			<pattern value="\d+"></pattern>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="referenceIDName">
+		<restriction base="string">
+			<pattern value="[\w-_]+"></pattern>
+		</restriction>
+	</simpleType>
 </schema>
