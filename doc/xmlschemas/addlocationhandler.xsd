@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezadlo="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+
+	<element name="AddLocation" type="ezadlo:AddLocationType"></element>
+
+	<complexType name="AddLocationType">
+		<attribute name="contentObject" type="ezxmlinst:referenceID"
+			use="required">
+		</attribute>
+		<attribute name="addToNode" type="ezxmlinst:referenceID" use="required"></attribute>
+	</complexType>
+</schema>
