@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezcrco="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+
+	<element name="CreateContent" type="ezcrco:CreateContentComplexType">
+	</element>
+	<complexType name="CreateContentComplexType">
+		<sequence>
+			<element name="ContentObject" type="ezcrco:ContentObjectType" maxOccurs="unbounded" minOccurs="1"></element>
+		</sequence>
+		<attribute name="parentNode" type="ezxmlinst:referenceID"
+			default="2">
+		</attribute>
+	</complexType>
+
+	<complexType name="ContentObjectType">
+		<sequence>
+			<element name="Attributes" type="ezcrco:AttributesType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="SetReference" maxOccurs="unbounded" minOccurs="0">
+				<complexType>
+					<simpleContent>
+						<extension base="ezxmlinst:referenceIDName">
+							<attribute name="attribute"
+								use="required">
+								<simpleType>
+									<restriction base="string">
+										<enumeration value="node_id"></enumeration>
+										<enumeration value="name"></enumeration>
+										<enumeration
+											value="object_id">
+										</enumeration>
+									</restriction>
+								</simpleType>
+							</attribute>
+						</extension>
+					</simpleContent>
+				</complexType></element>
+		</sequence>
+		<attribute name="contentClass" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="remoteID" type="string"></attribute>
+		<attribute name="objectID" type="int"></attribute>
+		<attribute name="section" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="owner" type="int"></attribute>
+		<attribute name="creator" type="int"></attribute>
+	</complexType>
+
+	<complexType name="AttributesType">
+		<choice maxOccurs="unbounded" minOccurs="0">
+			<any namespace="##any"></any>
+		</choice>
+	</complexType>
+</schema>

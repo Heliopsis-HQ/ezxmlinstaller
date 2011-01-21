@@ -42,25 +42,25 @@
 				type="ezcrro:LimitationsComplexType">
 			</element>
 		</sequence>
-		<attribute name="module" type="string" use="required"></attribute>
-		<attribute name="function" type="string" use="required"></attribute>
+        <attribute name="module" type="string" use="required"></attribute>
+        <attribute name="function" type="string" use="required"></attribute>
 	</complexType>
 	<complexType name="LimitationsComplexType">
 		<choice minOccurs="0" maxOccurs="unbounded">
 			<element name="Class" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
-			<element name="ParentClass" type="string" maxOccurs="1"
+			<element name="ParentClass" type="string" maxOccurs="unbounded"
 				minOccurs="0">
 			</element>
 			<element name="Section" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
 			<element name="Status" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
 			<element name="Language" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
 			<element name="Owner" type="string" minOccurs="0"
 				maxOccurs="1">
@@ -78,12 +78,13 @@
 				maxOccurs="1">
 			</element>
 			<element name="Node" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
 			<element name="Subtree" type="string" minOccurs="0"
-				maxOccurs="1">
+				maxOccurs="unbounded">
 			</element>
 			<any></any>
+			<element name="SiteAccess" type="string" maxOccurs="unbounded" minOccurs="0"></element>
 		</choice>
 	</complexType>
 </schema>
