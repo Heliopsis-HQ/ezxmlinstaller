@@ -37,6 +37,9 @@
 									</restriction>
 								</simpleType>
 							</attribute>
+							<attribute name="value"
+								type="ezxmlinst:referenceIDName" use="required">
+							</attribute>
 						</extension>
 					</simpleContent>
 				</complexType></element>
