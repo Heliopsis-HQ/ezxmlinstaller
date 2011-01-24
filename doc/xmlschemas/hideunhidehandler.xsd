@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezhide="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+	<element name="HideUnhide">
+		<complexType>
+			<attribute name="action" default="toogle" use="required">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="hide"></enumeration>
+						<enumeration value="unhide"></enumeration>
+						<enumeration value="toogle"></enumeration>
+					</restriction>
+				</simpleType>
+			</attribute>
+			<attribute name="nodeID" type="ezxmlinst:referenceID" use="required"></attribute>
+		</complexType>
+	</element>
+</schema>
