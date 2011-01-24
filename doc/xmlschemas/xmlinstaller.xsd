@@ -8,7 +8,7 @@
 	xmlns:ezcrro="http://ez.no/URI/xmlinstaller/handlers/ezcreaterole/0.1.5"
 	xmlns:ezasro="http://ez.no/URI/xmlinstaller/handlers/ezassignroles/0.1.5"
 	xmlns:ezcrse="http://ez.no/URI/xmlinstaller/handlers/ezcreatesection/0.1.5"
-	xmlns:ezcrco="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5">
+	xmlns:ezcrco="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5" xmlns:ezcrwo="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5">
 
 	<import schemaLocation="createsectionhandler.xsd"
 		namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatesection/0.1.5">
@@ -34,7 +34,10 @@
 	<import schemaLocation="createcontenthandler.xsd"
 		namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5">
 	</import>
-	<import schemaLocation="addlocationhandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"></import>
+	<import schemaLocation="addlocationhandler.xsd"
+		namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5">
+	</import>
+	<import schemaLocation="createworkflowhandler.xsd" namespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5"></import>
 	<element name="eZXMLImporter">
 		<complexType>
 			<choice minOccurs="1" maxOccurs="unbounded">
@@ -56,8 +59,11 @@
 				<element ref="ezcrco:CreateContent"
 					maxOccurs="unbounded" minOccurs="0">
 				</element>
-                <element ref="ezcrco:AddLocation" maxOccurs="unbounded" minOccurs="0"></element>
-                <any namespace="##other"></any>
+				<element ref="ezcrco:AddLocation" maxOccurs="unbounded"
+					minOccurs="0">
+				</element>
+                <element ref="ezcrwo:CreateWorkflow" maxOccurs="unbounded" minOccurs="0"></element>
+                <any namespace="##other" minOccurs="0" maxOccurs="unbounded"></any>
 			</choice>
 		</complexType>
 	</element>

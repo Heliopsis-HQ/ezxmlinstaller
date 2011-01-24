@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:ezcrwo="http://ez.no/URI/xmlinstaller/handlers/ezcreateworkflow/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5" xmlns:Q1="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5">
+	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
+
+	<element name="CreateWorkflow">
+		<complexType>
+			<sequence>
+				<element name="WorkflowGroup"
+					type="ezcrwo:WorkflowGroupType" maxOccurs="unbounded"
+					minOccurs="0">
+				</element>
+				<element ref="ezcrwo:Trigger" maxOccurs="unbounded" minOccurs="0"></element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="WorkflowGroupType">
+		<choice maxOccurs="unbounded" minOccurs="1">
+			<element name="Workflow" type="ezcrwo:WorkflowType" maxOccurs="unbounded" minOccurs="0"></element>
+		</choice>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="referenceID"
+			type="ezxmlinst:referenceIDName">
+		</attribute>
+		<attribute name="groupExistAction" type="string" use="optional"
+			fixed="keep">
+		</attribute>
+	</complexType>
+
+	<complexType name="WorkflowType">
+		<sequence>
+			<element name="Event" type="ezcrwo:EventType" maxOccurs="unbounded" minOccurs="1"></element>
+		</sequence>
+		<attribute name="id" type="int" use="optional"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="referenceID"
+			type="ezxmlinst:referenceIDName">
+		</attribute>
+		<attribute name="workflowTypeString" type="string"></attribute>
+		<attribute name="workflowExistAction" default="extend">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="extend
+replace">
+					</enumeration>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+	<complexType name="EventType">
+		<sequence>
+			<element name="Data" maxOccurs="1" minOccurs="0">
+				<complexType>
+					<choice maxOccurs="unbounded" minOccurs="0">
+						<any></any>
+					</choice>
+				</complexType></element>
+		</sequence>
+		<attribute name="workflowTypeString" type="string"
+			use="required">
+		</attribute>
+		<attribute name="description" type="string"></attribute>
+		<attribute name="placement" type="int" use="optional"></attribute>
+	</complexType>
+
+	<element name="Trigger" type="ezcrwo:TriggerType"></element>
+
+	<complexType name="TriggerType">
+		<attribute name="module" type="string" use="required"></attribute>
+		<attribute name="operation" type="string" use="required"></attribute>
+		<attribute name="connectType" default="before">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="before
+after">
+					</enumeration>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="workflowID" type="ezxmlinst:referenceID"></attribute>
+	</complexType>
+</schema>
