@@ -40,12 +40,11 @@
 			type="ezxmlinst:referenceIDName">
 		</attribute>
 		<attribute name="workflowTypeString" type="string"></attribute>
-		<attribute name="workflowExistAction" default="extend">
+		<attribute name="workflowExistAction" default="extend" use="optional">
 			<simpleType>
 				<restriction base="string">
-					<enumeration value="extend
-replace">
-					</enumeration>
+					<enumeration value="extend"></enumeration>
+					<enumeration value="replace"></enumeration>
 				</restriction>
 			</simpleType>
 		</attribute>
@@ -72,7 +71,7 @@ replace">
 	<complexType name="TriggerType">
 		<attribute name="module" type="string" use="required"></attribute>
 		<attribute name="operation" type="string" use="required"></attribute>
-		<attribute name="connectType" default="before">
+		<attribute name="connectType" default="before" use="required">
 			<simpleType>
 				<restriction base="string">
 					<enumeration value="before
@@ -81,6 +80,6 @@ after">
 				</restriction>
 			</simpleType>
 		</attribute>
-		<attribute name="workflowID" type="ezxmlinst:referenceID"></attribute>
+		<attribute name="workflowID" type="ezxmlinst:referenceID" use="required"></attribute>
 	</complexType>
 </schema>
