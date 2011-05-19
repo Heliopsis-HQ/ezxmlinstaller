@@ -37,7 +37,7 @@ class eZCreateContent extends eZXMLInstallerHandler
      * - auto :  priorities are automatically incremented
      *
      * Default is none
-     * @since 0.1.5
+     * @since 1.2.1
      */
     const PRIORITY_MODE_NONE = 'none';
     const PRIORITY_MODE_FIXED = 'fixed';
