@@ -21,7 +21,8 @@
 			<element name="Attributes" type="ezcrco:AttributesType"
 				maxOccurs="unbounded" minOccurs="0">
 			</element>
-			<element name="SetReference" maxOccurs="unbounded" minOccurs="0">
+			<element name="SetReference" maxOccurs="unbounded"
+				minOccurs="0">
 				<complexType>
 					<simpleContent>
 						<extension base="ezxmlinst:referenceIDName">
@@ -42,7 +43,9 @@
 							</attribute>
 						</extension>
 					</simpleContent>
-				</complexType></element>
+				</complexType>
+			</element>
+			<element name="Childs" type="ezcrco:ChildsType" maxOccurs="1" minOccurs="0" />
 		</sequence>
 		<attribute name="contentClass" type="ezxmlinst:referenceID"></attribute>
 		<attribute name="remoteID" type="string"></attribute>
@@ -57,4 +60,11 @@
 			<any namespace="##any"></any>
 		</choice>
 	</complexType>
+	
+	
+    <complexType name="ChildsType">
+        <sequence>
+            <element name="ContentObject" type="ezcrco:ContentObjectType" maxOccurs="unbounded" minOccurs="0"></element>
+        </sequence>
+    </complexType>
 </schema>
