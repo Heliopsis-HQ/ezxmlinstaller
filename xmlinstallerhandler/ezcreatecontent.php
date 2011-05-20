@@ -28,6 +28,21 @@ include_once('extension/ezxmlinstaller/classes/ezxmlinstallerhandler.php');
 class eZCreateContent extends eZXMLInstallerHandler
 {
 
+    /**
+     * Priority management modes
+     * Mode can be specified in each CreateContent or Childs node within a "priorityMode" attribute
+     * Available values :
+     * - none : no management at all
+     * - fixed : priority is expected to be specified on each ContentObject node within a "priority" attribute
+     * - auto :  priorities are automatically incremented
+     *
+     * Default is none
+     * @since 1.2.1
+     */
+    const PRIORITY_MODE_NONE = 'none';
+    const PRIORITY_MODE_FIXED = 'fixed';
+    const PRIORITY_MODE_AUTO = 'auto';
+
     function eZCreateContent( )
     {
     }
@@ -54,13 +69,17 @@ class eZCreateContent extends eZXMLInstallerHandler
                 $parentNodeID = 2;
             }
         }
+
+        $priorityMode = $xmlNode->hasAttribute( 'priorityMode' ) ? $xmlNode->getAttribute( 'priorityMode' ) : self::PRIORITY_MODE_NONE;
+        $priorityCounter = 0;
+
         $objectList = $xmlNode->childNodes; //getElementsByTagName( 'ContentObject' );
         foreach ( $objectList as $objectNode )
         {
             if ( $objectNode->nodeName != 'ContentObject' )
                 continue;
             $objectInformation = array();
-            $objectInformation['parentNode'] = $parentNodeID;
+            $objectInformation['parentNode'] = $this->getReferenceID($parentNodeID);
 
             $objectInformation['classID'] = $this->getReferenceID( $objectNode->getAttribute( 'contentClass' ) );
             $objectInformation['remoteID'] = $objectNode->getAttribute( 'remoteID' );
@@ -69,6 +88,25 @@ class eZCreateContent extends eZXMLInstallerHandler
             $objectInformation['ownerID'] = $objectNode->getAttribute( 'owner' );
             $objectInformation['creatorID'] = $objectNode->getAttribute( 'creator' );
             $objectInformation['attributes'] = array();
+            $objectInformation['sort_field'] = $objectNode->hasAttribute( 'sort_field' ) ? $objectNode->getAttribute( 'sort_field' ) : 'path';
+            $objectInformation['sort_order'] = $objectNode->hasAttribute( 'sort_order' ) ? $objectNode->getAttribute( 'sort_order' ) : 'asc';
+
+            switch( $priorityMode )
+            {
+                case self::PRIORITY_MODE_AUTO:
+                    $objectInformation['priority'] = $priorityCounter;
+                    break;
+
+                case self::PRIORITY_MODE_FIXED:
+                    $objectInformation['priority'] = $objectNode->hasAttribute( 'priority' ) ? intval( $objectNode->getAttribute( 'priority' ) ) : 0;
+                    break;
+
+                case self::PRIORITY_MODE_NONE:
+                default:
+                    $objectInformation['priority'] = 0;
+                    break;
+            }
+
             $attributeObject = $objectNode->getElementsByTagName( 'Attributes' )->item( 0 );
             if ( $attributeObject )
             {
@@ -93,6 +131,11 @@ class eZCreateContent extends eZXMLInstallerHandler
                 }
             }
             $refInfo = $this->createContentObject( $objectInformation );
+
+            if( $refInfo )
+            {
+                $priorityCounter++;
+            }
 
             // $referenceList = $objectNode->getElementsByTagName( 'SetReference' );
             $referenceList = $objectNode->childNodes;
@@ -197,11 +240,17 @@ class eZCreateContent extends eZXMLInstallerHandler
         {
             $db->begin();
             $versionNumber  = $contentObjectVersion->attribute( 'version' );
+
+            $sortField = intval( eZContentObjectTreeNode::sortFieldID( $objectInformation['sort_field'] ) );
+            $sortOrder = strtolower( $objectInformation['sort_order'] ) == 'desc' ? eZContentObjectTreeNode::SORT_ORDER_DESC : eZContentObjectTreeNode::SORT_ORDER_ASC;
+
             $nodeAssignment = eZNodeAssignment::create(
                     array(  'contentobject_id'      => $contentObject->attribute( 'id' ),
                             'contentobject_version' => $versionNumber,
                             'parent_node'           => $objectInformation['parentNode'],
-                            'is_main'               => 1
+                            'is_main'               => 1,
+                            'sort_field'			=> $sortField,
+                            'sort_order'			=> $sortOrder,
                             )
             );
             $nodeAssignment->store();
@@ -391,6 +440,24 @@ class eZCreateContent extends eZXMLInstallerHandler
                             }
                         } break;
 
+                        case 'ezobjectrelationlist':
+                        {
+                            $relationContent = explode( ',', $attributesContent['content'] );
+                            if ( count( $relationContent ) )
+                            {
+                                $objectIDs = array();
+                                foreach( $relationContent as $relation )
+                                {
+                                    $objectIDs[] = $this->getReferenceID( trim ( $relation ) );
+                                }
+                                $attribute->fromString( implode( '-', $objectIDs ) );
+                            }
+                            else
+                            {
+                                eZDebug::writeWarning( $attributesContent['content'], "No relation declared" );
+                            }
+                        } break;
+
 
                         case 'ezauthor':
                         case 'ezbinaryfile':
@@ -404,15 +471,22 @@ class eZCreateContent extends eZXMLInstallerHandler
                         case 'ezmedia':
                         case 'ezmultioption':
                         case 'ezmultiprice':
-                        case 'ezobjectrelationlist':
                         case 'ezoption':
                         case 'ezpackage':
                         case 'ezproductcategory':
                         case 'ezrangeoption':
                         case 'ezsubtreesubscription':
                         case 'eztime':
+                        default:
                         {
-                            $this->writeMessage( "\tDatatype " . $dataType . " not supported yet.", 'warning' );
+                            try
+                            {
+                                $attribute->fromString($attributesContent['content']);
+                            }
+                            catch ( Exception $e )
+                            {
+                                $this->writeMessage( "\tDatatype " . $dataType . " fromString function rejected value " . $attributesContent['content'], 'warning' );
+                            }
                         } break;
 
                     }
@@ -450,6 +524,11 @@ class eZCreateContent extends eZXMLInstallerHandler
                     $refArray = array( "node_id"   => $newNode->attribute( 'node_id' ),
                                        "name"      => $contentObjectVersion->attribute( 'name' ),
                                        "object_id" => $contentObject->attribute( 'id' ) );
+
+                    if( $objectInformation['priority'] )
+                    {
+                        $this->updateNodePriority( $refArray['node_id'], $objectInformation['priority'] );
+                    }
                 }
             }
             unset($contentObjectVersion);
@@ -457,6 +536,22 @@ class eZCreateContent extends eZXMLInstallerHandler
             return $refArray;
         }
     return false;
+    }
+
+    /**
+     * Updates node priority
+     * @param int $node_id		Node to update
+     * @param int $priority		New priority value
+     * @since 1.2.1
+     */
+    protected function updateNodePriority( $node_id, $priority )
+    {
+        $node = eZContentObjectTreeNode::fetch( $node_id );
+        if( $node )
+        {
+            $node->setAttribute( 'priority', $priority );
+            $node->store();
+        }
     }
 }
 

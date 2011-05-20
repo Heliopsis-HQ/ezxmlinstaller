@@ -82,7 +82,7 @@
 		<restriction base="string">
 			<pattern value="internal:[\w-_]+"></pattern>
 			<pattern value="(node_id|object_id):\d+"></pattern>
-			<pattern value="(remote_id|remote_node_id):[\w-_]+"></pattern>
+			<pattern value="(remote_id|remote_id_node_id):[\w-_]+"></pattern>
 			<pattern value="\d+"></pattern>
 		</restriction>
 	</simpleType>
@@ -92,4 +92,10 @@
 			<pattern value="[\w-_]+"></pattern>
 		</restriction>
 	</simpleType>
+	<simpleType name="StringReferences">
+		<annotation>
+			<documentation>may include reference ids surrounded by square brackets.
+ex: [internal:MY_REF],anotherValue</documentation>
+		</annotation>
+		<restriction base="string"></restriction></simpleType>
 </schema>

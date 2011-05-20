@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema
-	targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"
+<schema targetNamespace="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"
 	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
-	xmlns:ezcrco="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5" xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
+	xmlns:ezcrco="http://ez.no/URI/xmlinstaller/handlers/ezcreatecontent/0.1.5"
+	xmlns:ezxmlinst="http://ez.no/URI/xmlinstaller/0.1.5">
 	<import schemaLocation="xmlinstaller.xsd" namespace="http://ez.no/URI/xmlinstaller/0.1.5"></import>
 
 	<element name="CreateContent" type="ezcrco:CreateContentComplexType">
 	</element>
 	<complexType name="CreateContentComplexType">
 		<sequence>
-			<element name="ContentObject" type="ezcrco:ContentObjectType" maxOccurs="unbounded" minOccurs="1"></element>
+			<element name="ContentObject" type="ezcrco:ContentObjectType"
+				maxOccurs="unbounded" minOccurs="1"></element>
 		</sequence>
 		<attribute name="parentNode" type="ezxmlinst:referenceID"
 			default="2">
 		</attribute>
+		<attribute name="priorityMode" type="ezcrco:PriorityModeType"
+			default="none"></attribute>
 	</complexType>
 
 	<complexType name="ContentObjectType">
@@ -25,24 +28,25 @@
 				<complexType>
 					<simpleContent>
 						<extension base="ezxmlinst:referenceIDName">
-							<attribute name="attribute"
-								use="required">
+							<attribute name="attribute" use="required">
 								<simpleType>
 									<restriction base="string">
 										<enumeration value="node_id"></enumeration>
 										<enumeration value="name"></enumeration>
-										<enumeration
-											value="object_id">
+										<enumeration value="object_id">
 										</enumeration>
 									</restriction>
 								</simpleType>
 							</attribute>
-							<attribute name="value"
-								type="ezxmlinst:referenceIDName" use="required">
+							<attribute name="value" type="ezxmlinst:referenceIDName"
+								use="required">
 							</attribute>
 						</extension>
 					</simpleContent>
-				</complexType></element>
+				</complexType>
+			</element>
+			<element name="Childs" type="ezcrco:ChildsType" maxOccurs="1"
+				minOccurs="0" />
 		</sequence>
 		<attribute name="contentClass" type="ezxmlinst:referenceID"></attribute>
 		<attribute name="remoteID" type="string"></attribute>
@@ -50,6 +54,33 @@
 		<attribute name="section" type="ezxmlinst:referenceID"></attribute>
 		<attribute name="owner" type="int"></attribute>
 		<attribute name="creator" type="int"></attribute>
+		<attribute name="priority" type="int"></attribute>
+		<attribute name="sort_field" default="path">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="path"></enumeration>
+					<enumeration value="published"></enumeration>
+					<enumeration value="modified"></enumeration>
+					<enumeration value="section"></enumeration>
+					<enumeration value="depth"></enumeration>
+					<enumeration value="class_identifier"></enumeration>
+					<enumeration value="class_name"></enumeration>
+					<enumeration value="priority"></enumeration>
+					<enumeration value="name"></enumeration>
+					<enumeration value="modified_subnode"></enumeration>
+					<enumeration value="node_id"></enumeration>
+					<enumeration value="contentobject_id"></enumeration>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="sort_order" default="asc">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="asc"></enumeration>
+					<enumeration value="desc"></enumeration>
+				</restriction>
+			</simpleType>
+		</attribute>
 	</complexType>
 
 	<complexType name="AttributesType">
@@ -57,4 +88,22 @@
 			<any namespace="##any"></any>
 		</choice>
 	</complexType>
+	<complexType name="ChildsType">
+		<sequence>
+			<element name="ContentObject" type="ezcrco:ContentObjectType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+		</sequence>
+		<attribute name="priorityMode" type="ezcrco:PriorityModeType"
+			default="none"></attribute>
+	</complexType>
+
+
+	<simpleType name="PriorityModeType">
+		<restriction base="string">
+			<enumeration value="none"></enumeration>
+			<enumeration value="auto"></enumeration>
+			<enumeration value="fixed"></enumeration>
+		</restriction>
+	</simpleType>
 </schema>

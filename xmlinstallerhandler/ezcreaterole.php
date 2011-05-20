@@ -67,7 +67,7 @@ class eZCreateRole extends eZXMLInstallerHandler
                             {
                                 $policyLimitationList[$limitation->nodeName] = array();
                             }
-                            $policyLimitationList[$limitation->nodeName][] = $this->getReferenceID( $limitation->textContent );
+                            $policyLimitationList[$limitation->nodeName][] = $this->getLimitationValue($limitation->nodeName, $limitation->textContent);
                         }
                     }
                 }
@@ -116,6 +116,49 @@ class eZCreateRole extends eZXMLInstallerHandler
             }
         }
         $this->addReference( $refArray );
+    }
+
+    /**
+     * Returns a valid limitation value to be saved in database
+     *
+     * @since 1.2.0
+     * @param string $limitationType	Limitation type
+     * @param string $limitationValue	Human readable input value
+     * @return string	Value to be saved in database
+     */
+    private function getLimitationValue( $limitationType, $limitationValue ){
+        $limitationValue = $this->getReferenceID( $limitationValue );
+        switch( $limitationType )
+        {
+            case 'Class':
+            case 'ParentClass':
+                $class = eZContentClass::fetchByIdentifier( $limitationValue );
+                if( $class )
+                {
+                    $limitationValue = $class->ID;
+                }
+                break;
+
+            case 'Subtree':
+                //Subtree limitations need to store path_string instead of node_id
+                $val = (int) $limitationValue;
+                if( $val > 0 )
+                {
+                    $node = eZContentObjectTreeNode::fetch( $val );
+                    $limitationValue = $node->attribute( 'path_string' );
+                }
+   	            break;
+
+            case 'SiteAccess':
+                //siteaccess name must be crc32'd
+                if( !is_int( $limitationValue ) )
+                {
+	               $limitationValue = eZSys::ezcrc32( $limitationValue );
+                }
+                break;
+         }
+
+        return $limitationValue;
     }
 
     static public function handlerInfo()

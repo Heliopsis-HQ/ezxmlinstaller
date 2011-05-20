@@ -76,6 +76,7 @@ class eZXMLInstallerHandler
         $type = $splitted[0];
         $refID = $splitted[1];
         $referenceID = false;
+
         switch( $type )
         {
             case 'internal':
@@ -109,6 +110,22 @@ class eZXMLInstallerHandler
                     }
                 }
             } break;
+            case 'remote_id':
+            {
+                $relContentObject = eZContentObject::fetchByRemoteID( $refID );
+                if ( $relContentObject )
+                {
+                    $referenceID = $relContentObject->ID;
+                }
+            } break;
+            case 'remote_id_node_id':
+            {
+                $relContentObject = eZContentObject::fetchByRemoteID( $refID );
+                if ( $relContentObject )
+                {
+                    $referenceID = $relContentObject->mainNodeID();
+                }
+            } break;
         }
         return $referenceID;
     }
@@ -128,6 +145,43 @@ class eZXMLInstallerHandler
         $string = str_replace( '&#93;', ']', $string );
         $string = str_replace( '&#91;', '[', $string );
         return $string;
+    }
+
+    /**
+     * Browses node to replace any string references in subnodes or attributes
+     *
+     * @since 1.2.1
+     * @param DOMNode 	$node	node to inspect
+     * @return DOMNode	Node with replaced string references
+     */
+    function parseAndReplaceNodeStringReferences( DOMNode $node )
+    {
+        $attrs = $node->attributes;
+        foreach ( $attrs as $attr )
+        {
+            $node->setAttribute( $attr->name, $this->getReferenceID( $attr->value ) );
+        }
+
+        $children = $node->childNodes;
+        foreach ( $children as $child )
+        {
+            switch ( $child->nodeType )
+            {
+                case XML_TEXT_NODE:
+                    $child->textContent = $this->parseAndReplaceStringReferences( $child->textContent );
+                    break;
+
+                case XML_CDATA_SECTION_NODE:
+                    $child->replaceData( $this->parseAndReplaceStringReferences( $child->data ) );
+                    break;
+
+                case XML_ELEMENT_NODE:
+                    $child = $this->parseAndReplaceNodeStringReferences($child);
+                    break;
+            }
+        }
+
+        return $node;
     }
 
     function settings( )
