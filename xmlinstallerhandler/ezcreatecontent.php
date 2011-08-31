@@ -448,7 +448,7 @@ class eZCreateContent extends eZXMLInstallerHandler
                             $keyword->initializeKeyword( $attributesContent['content'] );
                             $attribute->setContent( $keyword );
                         } break;
-                        case 'ezmatrix':
+                        /*case 'ezmatrix':
                         {
                             if ( is_array( $attributesContent ) )
                             {
@@ -470,7 +470,7 @@ class eZCreateContent extends eZXMLInstallerHandler
                                 $matrix->decodeXML( $attribute->attribute( 'data_text' ) );
                                 $attribute->setContent( $matrix );
                             }
-                        } break;
+                        } break;*/
 
                         case 'ezobjectrelationlist':
                         {
