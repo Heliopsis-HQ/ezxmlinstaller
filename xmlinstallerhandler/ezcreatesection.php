@@ -40,6 +40,7 @@ class eZCreateSection extends eZXMLInstallerHandler
         $navigationPart = $xmlNode->getAttribute( 'navigationPart' );
         $referenceID    = $xmlNode->getAttribute( 'referenceID' );
 
+        $sectionID = null;
         if( $sectionIdentifier )
         {
             $section = eZSection::fetchByIdentifier( $sectionIdentifier );
