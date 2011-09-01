@@ -92,7 +92,7 @@ class eZCreateContent extends eZXMLInstallerHandler
             $objectInformation['sort_order'] = $objectNode->hasAttribute( 'sort_order' ) ? $objectNode->getAttribute( 'sort_order' ) : 'asc';
 
 
-            $objectInformation['sectionID'] = $this->getValidSectionID( $objectInformation['sectionID'], $parentNodeID );
+            $objectInformation['sectionID'] = $this->getValidSectionID( $objectInformation['sectionID'], $objectInformation['parentNode'] );
 
 
             switch( $priorityMode )
