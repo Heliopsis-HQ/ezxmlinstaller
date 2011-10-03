@@ -111,9 +111,29 @@ class eZCreateContent extends eZXMLInstallerHandler
                     break;
             }
 
-            $attributeObject = $objectNode->getElementsByTagName( 'Attributes' )->item( 0 );
-            if ( $attributeObject )
+            $relationNodes = $objectNode->getElementsByTagName( 'Relation' );
+            if( $relationNodes->length )
             {
+                $objectInformation['relations'] = array();
+                foreach ( $relationNodes as $relationNode )
+                {
+                    $targetRef = $relationNode->getAttribute( 'target' );
+                    if( $targetRef )
+                    {
+                        $objectInformation['relations'][] = $this->getReferenceID( $targetRef );
+                    }
+                    else
+                    {
+                        $this->writeMessage( 'Warning : No target defined for object relation' );
+                    }
+                }
+            }
+
+            $refInfo = false;
+            $attributeObjects = $objectNode->getElementsByTagName( 'Attributes' );
+            foreach ( $attributeObjects as $attributeObject )
+            {
+                $objectInformation['attributes'] = array();
                 $attributes = $attributeObject->childNodes;
                 foreach ( $attributes as $attribute )
                 {
@@ -133,27 +153,17 @@ class eZCreateContent extends eZXMLInstallerHandler
                         $objectInformation['attributes'][$attribute->nodeName] = array_merge( $attrList, $objectInformation['attributes'][$attribute->nodeName] );
                     }
                 }
-            }
 
-            $relationNodes = $objectNode->getElementsByTagName( 'Relation' );
-            if( $relationNodes->length )
-            {
-                $objectInformation['relations'] = array();
-                foreach ( $relationNodes as $relationNode )
+                $language = false;
+                if( $attributeObject->hasAttribute( 'language' ) )
                 {
-                    $targetRef = $relationNode->getAttribute( 'target' );
-                    if( $targetRef )
-                    {
-                        $objectInformation['relations'][] = $this->getReferenceID( $targetRef );
-                    }
-                    else
-                    {
-                        $this->writeMessage( 'Warning : No target defined for object relation' );
-                    }
+                    $language = $attributeObject->getAttribute( 'language' );
                 }
+
+                $refInfo = $this->createContentObject( $objectInformation, $language );
             }
 
-            $refInfo = $this->createContentObject( $objectInformation );
+
 
             if( $refInfo )
             {
@@ -201,7 +211,7 @@ class eZCreateContent extends eZXMLInstallerHandler
     }
 
 
-    function createContentObject( $objectInformation )
+    function createContentObject( $objectInformation, $languageCode = false )
     {
         $db = eZDB::instance();
         $contentObjectVersion = false;
@@ -220,7 +230,7 @@ class eZCreateContent extends eZXMLInstallerHandler
             if (  $contentObject )
             {
                 $this->writeMessage( "\t[".$objectInformation['remoteID']."] Object exists: " . $contentObject->attribute("name") . ". Creating new version.", 'notice' );
-                $contentObjectVersion = $contentObject->createNewVersion();
+                $contentObjectVersion = $contentObject->createNewVersion( false, true, $languageCode );
             }
         }
         elseif ( $objectInformation['objectID'] )
@@ -229,7 +239,7 @@ class eZCreateContent extends eZXMLInstallerHandler
             if (  $contentObject )
             {
                 $this->writeMessage( "\t[".$objectInformation['remoteID']."] Object exists: " . $contentObject->attribute("name") . ". Creating new version.", 'notice' );
-                $contentObjectVersion = $contentObject->createNewVersion();
+                $contentObjectVersion = $contentObject->createNewVersion( false, true, $languageCode );
             }
         }
 
@@ -253,7 +263,7 @@ class eZCreateContent extends eZXMLInstallerHandler
                 $this->writeMessage( "\tCannot instantiate class '". $objectInformation['classID'] ."'." , 'error' );
                 return false;
             }
-            $contentObject = $contentClass->instantiate( $userID );
+            $contentObject = $contentClass->instantiate( $userID, 0, false, $languageCode );
             $contentObject->setAttribute( 'remote_id',  $objectInformation['remoteID'] );
             if ( $contentObject )
             {
