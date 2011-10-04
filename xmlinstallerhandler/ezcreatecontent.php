@@ -130,9 +130,14 @@ class eZCreateContent extends eZXMLInstallerHandler
             }
 
             $refInfo = false;
-            $attributeObjects = $objectNode->getElementsByTagName( 'Attributes' );
+            $attributeObjects = $objectNode->childNodes;
             foreach ( $attributeObjects as $attributeObject )
             {
+                if( $attributeObject->nodeName != 'Attributes' )
+                {
+                    continue;
+                }
+
                 $objectInformation['attributes'] = array();
                 $attributes = $attributeObject->childNodes;
                 foreach ( $attributes as $attribute )
