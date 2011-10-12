@@ -505,6 +505,34 @@ class eZCreateContent extends eZXMLInstallerHandler
                             }
                         } break;
 
+                        case 'eztags':
+                            $tags = explode( ',', $attributesContent['content'] );
+                            if ( count( $tags ) )
+                            {
+                                $tag_ids = array();
+                                $tag_keywords = array();
+                                $tag_pids = array();
+                                $objectIDs = array();
+                                foreach( $tags as $tag_remote )
+                                {
+                                    $tag = eZTagsObject::fetchByRemoteID( $tag_remote );
+                                    if( $tag )
+                                    {
+                                        $tag_ids[] = $tag->attribute( 'id' );
+                                        $tag_keywords[] = $tag->attribute( 'id' );
+                                        $tag_pids[] = $tag->attribute( 'parent_id' );
+                                    }
+                                }
+                                $eztags = new eZTags();
+                                $eztags->createFromStrings( implode( '|#', $tag_ids ), implode( '|#', $tag_keywords ), implode( '|#', $tag_pids ) );
+                                $attribute->fromString( $eztags->idString() . '|#' . $eztags->keywordString() . '|#' . $eztags->parentString() );
+                            }
+                            else
+                            {
+                                eZDebug::writeWarning( $attributesContent['content'], "No tag declared" );
+                            }
+                            break;
+
 
                         case 'ezauthor':
                         case 'ezbinaryfile':
