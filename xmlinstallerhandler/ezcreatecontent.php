@@ -522,6 +522,10 @@ class eZCreateContent extends eZXMLInstallerHandler
                                         $tag_keywords[] = $tag->attribute( 'id' );
                                         $tag_pids[] = $tag->attribute( 'parent_id' );
                                     }
+                                    else
+                                    {
+                                        $this->writeMessage( $tag_remote . ' is not a valid tag remote_id', 'error' );
+                                    }
                                 }
                                 $eztags = new eZTags();
                                 $eztags->createFromStrings( implode( '|#', $tag_ids ), implode( '|#', $tag_keywords ), implode( '|#', $tag_pids ) );
@@ -529,7 +533,7 @@ class eZCreateContent extends eZXMLInstallerHandler
                             }
                             else
                             {
-                                eZDebug::writeWarning( $attributesContent['content'], "No tag declared" );
+                                $this->writeMessage( $attributesContent['content'] . " : No tag declared", 'error' );
                             }
                             break;
 
