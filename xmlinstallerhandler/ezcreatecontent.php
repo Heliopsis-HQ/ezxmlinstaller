@@ -85,7 +85,7 @@ class eZCreateContent extends eZXMLInstallerHandler
             $objectInformation['remoteID'] = $objectNode->getAttribute( 'remoteID' );
             $objectInformation['objectID'] = $objectNode->getAttribute( 'objectID' );
             $objectInformation['sectionID'] = $this->getReferenceID( $objectNode->getAttribute( 'section' ) );
-            $objectInformation['ownerID'] = $objectNode->getAttribute( 'owner' );
+            $objectInformation['ownerID'] = $this->getReferenceID( $objectNode->getAttribute( 'owner' ) );
             $objectInformation['creatorID'] = $objectNode->getAttribute( 'creator' );
             $objectInformation['attributes'] = array();
             $objectInformation['sort_field'] = $objectNode->hasAttribute( 'sort_field' ) ? $objectNode->getAttribute( 'sort_field' ) : 'path';
