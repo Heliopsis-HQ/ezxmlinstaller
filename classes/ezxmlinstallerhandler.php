@@ -176,11 +176,8 @@ class eZXMLInstallerHandler
             switch ( $child->nodeType )
             {
                 case XML_TEXT_NODE:
-                    $child->textContent = $this->parseAndReplaceStringReferences( $child->textContent );
-                    break;
-
                 case XML_CDATA_SECTION_NODE:
-                    $child->replaceData( $this->parseAndReplaceStringReferences( $child->data ) );
+                    $child->replaceData( 0, strlen( $child->data ), $this->parseAndReplaceStringReferences( $child->data ) );
                     break;
 
                 case XML_ELEMENT_NODE:
