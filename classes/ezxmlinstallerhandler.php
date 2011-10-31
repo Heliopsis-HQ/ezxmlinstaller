@@ -126,6 +126,14 @@ class eZXMLInstallerHandler
                     $referenceID = $relContentObject->mainNodeID();
                 }
             } break;
+            case 'tag_remote_id':
+            {
+                $relTag = eZTagsObject::fetchByRemoteID( $refID );
+                if ( $relTag )
+                {
+                    $referenceID = $relTag->attribute( 'id' );
+                }
+            } break;
         }
         return $referenceID;
     }
