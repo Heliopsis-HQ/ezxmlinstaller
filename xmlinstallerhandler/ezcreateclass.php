@@ -318,8 +318,7 @@ class eZCreateClass extends eZXMLInstallerHandler
                             {
                                 foreach ( $updateAttributeList as $classAttributeID )
                                 {
-                                    $objectAttribute = eZContentObjectAttribute::create( $classAttributeID, $contentobjectID, $version );
-                                    $objectAttribute->setAttribute( 'language_code', $translation );
+                                    $objectAttribute = eZContentObjectAttribute::create( $classAttributeID, $contentobjectID, $version, $translation );
                                     $objectAttribute->initialize();
                                     $objectAttribute->store();
                                     $objectAttribute->postInitialize();
