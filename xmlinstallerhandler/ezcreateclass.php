@@ -240,6 +240,7 @@ class eZCreateClass extends eZXMLInstallerHandler
                 $attributeIsTranslatable = (strtolower( $classAttributeNode->getAttribute( 'translatable' ) ) == 'false') ? 0 : 1;
                 $attributeIdentifier = $classAttributeNode->getAttribute( 'identifier' );
                 $attributePlacement = $classAttributeNode->getAttribute( 'placement' );
+                $attributeDescription = $classAttributeNode->getAttribute( 'description' );
 
                 $attributeNameListObject = $classAttributeNode->getElementsByTagName( 'Names' )->item( 0 );
                 if ( $attributeNameListObject->hasAttributes() )
@@ -276,6 +277,7 @@ class eZCreateClass extends eZXMLInstallerHandler
                 $params['is_information_collector'] = $attributeIsInformationCollector;
                 $params['datatype-parameter']       = $this->parseAndReplaceNodeStringReferences( $attributeDatatypeParameterNode );
                 $params['attribute-node']           = $classAttributeNode;
+                $params['description'] = $attributeDescription;
 
                 if ( !array_key_exists( $attributeIdentifier, $classDataMap ) )
                 {
@@ -429,6 +431,7 @@ class eZCreateClass extends eZXMLInstallerHandler
         $isSearchable = isset( $params['is_searchable'] ) ? $params['is_searchable'] : 0;
         $isCollector  = isset( $params['is_information_collector'] ) ? $params['is_information_collector'] : false;
         $attrContent  = isset( $params['content'] )       ? $params['content'] : false;
+        $description  = isset( $params['description'] )	  ? $params['description'] : '';
 
         $attrCreateInfo = array( 'identifier' => $classAttributeIdentifier,
                                     'serialized_name_list' => $classAttributeNameList->serializeNames(),
@@ -437,6 +440,8 @@ class eZCreateClass extends eZXMLInstallerHandler
                                     'is_searchable' => $isSearchable,
                                     'is_information_collector' => $isCollector );
         $newAttribute = eZContentClassAttribute::create( $classID, $datatype, $attrCreateInfo  );
+
+        $newAttribute->setDescription( $description );
 
         $dataType = $newAttribute->dataType();
         if ( !$dataType )
