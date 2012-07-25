@@ -91,6 +91,7 @@
         </attribute>
         <attribute name="translatable" type="boolean" default="true"></attribute>
         <attribute name="placement" type="int" use="optional"></attribute>
+        <attribute name="description" type="string" use="optional"></attribute>
     </complexType>
 
     <element name="Names" type="ezcrcl:NamesComplexType"></element>
