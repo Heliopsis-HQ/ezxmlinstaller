@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@
 //
 
 require_once( 'autoload.php' );
-require_once( 'kernel/common/template.php' );
 
 if ( !function_exists( 'readline' ) )
 {
@@ -45,7 +44,7 @@ class eZPrepareXML
     function prepareXMLFromTemplate( $templateName, $cli = false )
     {
         $template = 'design:' . $templateName . '.tpl';
-        $tpl      = templateInit();
+        $tpl = eZTemplate::factory();
 
         $tpl->setVariable( 'tpl_info', false );
 

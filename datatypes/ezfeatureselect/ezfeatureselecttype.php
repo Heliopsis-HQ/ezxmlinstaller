@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -53,8 +53,7 @@ class eZFeatureSelectType extends eZDataType
             $templateLocation = $classAttribute->attribute( self::TEMPLATE_LOCATION_FIELD );
             $template = 'design:' . $templateLocation;
             $attrContent = array();
-            include_once( 'kernel/common/template.php' );
-            $tpl = templateInit();
+            $tpl = eZTemplate::factory();
             $tpl->setVariable( 'availible_feature_list', false );
 
             $content = $tpl->fetch( $template );
@@ -218,8 +217,7 @@ class eZFeatureSelectType extends eZDataType
         $templateLocation = $classAttribute->attribute( self::TEMPLATE_LOCATION_FIELD );
         $template = 'design:' . $templateLocation;
         $attrContent = array();
-        include_once( 'kernel/common/template.php' );
-        $tpl = templateInit();
+        $tpl = eZTemplate::factory();
         $tpl->setVariable( 'availible_feature_list', false );
 
 
