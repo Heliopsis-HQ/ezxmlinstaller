@@ -243,30 +243,50 @@ class eZCreateClass extends eZXMLInstallerHandler
                 $attributeDescription = $classAttributeNode->getAttribute( 'description' );
 
                 $attributeNameListObject = $classAttributeNode->getElementsByTagName( 'Names' )->item( 0 );
-                if ( $attributeNameListObject->hasAttributes() )
+                if ( $attributeNameListObject->hasAttributes())
                 {
-                    if ( $attributeNameListObject->hasAttributes())
+                    $attributes = $attributeNameListObject->attributes;
+                    if ( !is_null($attributes) )
                     {
-                        $attributes = $attributeNameListObject->attributes;
-                        if ( !is_null($attributes) )
+                        $attributeNameList = array();
+                        foreach ( $attributes as $index=>$attr )
                         {
-                            $attributeNameList = array();
-                            foreach ( $attributes as $index=>$attr )
-                            {
-                                $attributeNameList[$attr->name] = $attr->value;
-                            }
+                            $attributeNameList[$attr->name] = $attr->value;
+                        }
+                    }
+                }
+
+                $attributedescrListObject = $classAttributeNode->getElementsByTagName( 'Descriptions' );
+                $attributeDescrList = array();
+                if ( $attributedescrListObject->length && $attributedescrListObject->item( 0 )->hasAttributes())
+                {
+                    $attributes = $attributedescrListObject->item( 0 )->attributes;
+                    if ( !is_null($attributes) )
+                    {
+                        foreach ( $attributes as $index=>$attr )
+                        {
+                            $attributeDescrList[$attr->name] = $attr->value;
                         }
                     }
                 }
 
                 $classAttributeNameList = new eZContentClassNameList( serialize($attributeNameList) );
                 $classAttributeNameList->validate( );
+
+                if( !empty( $attributeDescrList ) )
+                {
+                    $classAttributeDescrList = new eZSerializedObjectNameList( serialize($attributeDescrList) );
+                    $classAttributeDescrList->validate( );
+                }
+                else $classAttributeDescrList = null;
+
                 $attributeDatatypeParameterNode = $classAttributeNode->getElementsByTagName( 'DatatypeParameters' )->item( 0 );
                 $classAttribute = $class->fetchAttributeByIdentifier( $attributeIdentifier );
 
                 $params = array();
                 $params['identifier']               = $attributeIdentifier;
                 $params['name_list']                = $classAttributeNameList;
+                $params['descr_list']               = $classAttributeDescrList;
                 $params['data_type_string']         = $attributeDatatype;
                 $params['default_value']            = '';
                 $params['can_translate']            = $attributeIsTranslatable;
@@ -423,6 +443,7 @@ class eZCreateClass extends eZXMLInstallerHandler
 
         $classAttributeIdentifier = $params['identifier'];
         $classAttributeNameList = $params['name_list'];
+        $classAttributeDescrList = $params['descr_list'];
 
         $datatype = $params['data_type_string'];
         $defaultValue = isset( $params['default_value'] ) ? $params['default_value'] : false;
@@ -435,6 +456,7 @@ class eZCreateClass extends eZXMLInstallerHandler
 
         $attrCreateInfo = array( 'identifier' => $classAttributeIdentifier,
                                     'serialized_name_list' => $classAttributeNameList->serializeNames(),
+                                    'serialized_description_list' => $classAttributeDescrList instanceof eZSerializedObjectNameList ? $classAttributeDescrList->serializeNames() : '',
                                     'can_translate' => $canTranslate,
                                     'is_required' => $isRequired,
                                     'is_searchable' => $isSearchable,
@@ -486,6 +508,7 @@ class eZCreateClass extends eZXMLInstallerHandler
 
         $classAttributeIdentifier = $params['identifier'];
         $classAttributeNameList = $params['name_list'];
+        $classAttributeDescrList = $params['descr_list'];
 
         $classAttribute = $class->fetchAttributeByIdentifier( $classAttributeIdentifier );
 
@@ -496,6 +519,12 @@ class eZCreateClass extends eZXMLInstallerHandler
         }
 
         $classAttribute->NameList = $classAttributeNameList;
+
+        if( $classAttributeDescrList instanceof eZSerializedObjectNameList )
+        {
+            $classAttribute->DescriptionList = $classAttributeDescrList;
+        }
+
         $classAttribute->setAttribute( 'data_type_string',  $params['data_type_string']  );
         $classAttribute->setAttribute( 'identifier', $classAttributeIdentifier  );
         $classAttribute->setAttribute( 'is_required', $params['is_required']  );
