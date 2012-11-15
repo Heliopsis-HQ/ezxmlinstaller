@@ -521,15 +521,27 @@ class eZCreateContent extends eZXMLInstallerHandler
                                         $tag_ids[] = $tag->attribute( 'id' );
                                         $tag_keywords[] = $tag->attribute( 'id' );
                                         $tag_pids[] = $tag->attribute( 'parent_id' );
+                                        $tag_locales[] = $contentObject->attribute( 'language_code' );
                                     }
                                     else
                                     {
                                         $this->writeMessage( $tag_remote . ' is not a valid tag remote_id', 'error' );
                                     }
                                 }
-                                $eztags = new eZTags();
-                                $eztags->createFromStrings( implode( '|#', $tag_ids ), implode( '|#', $tag_keywords ), implode( '|#', $tag_pids ) );
-                                $attribute->fromString( $eztags->idString() . '|#' . $eztags->keywordString() . '|#' . $eztags->parentString() );
+
+                                if( class_exists( 'eZTagsKeyword' ) )
+                                {
+                                    //on est sur la v2 d'eZTags
+                                    $tags = eZTags::createFromStrings($attribute, implode( '|#', $tag_ids ), implode( '|#', $tag_keywords ), implode( '|#', $tag_pids ), implode( '|#', $tag_locales ) );
+                                    $attribute->setContent( $tags );
+                                }
+                                else
+                                {
+                                    //on est sur la v1 d'eZTags
+                                    $eztags = new eZTags();
+                                    $eztags->createFromStrings( implode( '|#', $tag_ids ), implode( '|#', $tag_keywords ), implode( '|#', $tag_pids ) );
+                                    $attribute->fromString( $eztags->idString() . '|#' . $eztags->keywordString() . '|#' . $eztags->parentString() );
+                                }
                             }
                             else
                             {
