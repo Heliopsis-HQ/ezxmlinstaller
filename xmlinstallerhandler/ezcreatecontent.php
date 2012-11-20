@@ -519,9 +519,17 @@ class eZCreateContent extends eZXMLInstallerHandler
                                     if( $tag )
                                     {
                                         $tag_ids[] = $tag->attribute( 'id' );
-                                        $tag_keywords[] = $tag->attribute( 'id' );
                                         $tag_pids[] = $tag->attribute( 'parent_id' );
-                                        $tag_locales[] = $contentObject->attribute( 'language_code' );
+                                        if( class_exists( 'eZTagsKeyword' ) )
+                                        {
+                                            //on est sur la v2 d'eZTags
+                                            $tag_keywords[] = $tag->getKeyword( $contentObject->attribute( 'current_language' ) );
+                                            $tag_locales[] = $contentObject->attribute( 'current_language' );
+                                        }
+                                        else
+                                        {
+                                            $tag_keywords[] = $tag->attribute( 'keyword' );
+                                        }
                                     }
                                     else
                                     {
