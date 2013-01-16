@@ -90,6 +90,8 @@ class eZCreateContent extends eZXMLInstallerHandler
             $objectInformation['attributes'] = array();
             $objectInformation['sort_field'] = $objectNode->hasAttribute( 'sort_field' ) ? $objectNode->getAttribute( 'sort_field' ) : 'path';
             $objectInformation['sort_order'] = $objectNode->hasAttribute( 'sort_order' ) ? $objectNode->getAttribute( 'sort_order' ) : 'asc';
+            $objectInformation['published'] = $objectNode->getAttribute( 'published' );
+            $objectInformation['modified'] = $objectNode->getAttribute( 'modified' );
 
 
             $objectInformation['sectionID'] = $this->getValidSectionID( $objectInformation['sectionID'], $objectInformation['parentNode'] );
@@ -613,6 +615,19 @@ class eZCreateContent extends eZXMLInstallerHandler
                 {
                     $contentObject->addContentObjectRelation( $toObjectID );
                 }
+            }
+
+
+            if( $objectInformation['published'] )
+            {
+                $contentObjectVersion->setAttribute( 'created', $objectInformation['published'] );
+                $contentObject->setAttribute( 'published', $objectInformation['published'] );
+            }
+
+            if( $objectInformation['modified'] )
+            {
+                $contentObjectVersion->setAttribute( 'modified', $objectInformation['modified'] );
+                $contentObject->setAttribute( 'modified', $objectInformation['modified'] );
             }
 
             $contentObjectVersion->store();
