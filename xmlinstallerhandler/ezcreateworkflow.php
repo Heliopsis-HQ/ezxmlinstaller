@@ -132,11 +132,6 @@ class eZCreateWorkflow extends eZXMLInstallerHandler
                 {
                     $this->writeMessage( "\tWorkflow '$workflowName' will be created." , 'notice' );
                     $workflow = eZWorkflow::create( $userID );
-                    $workflow->setAttribute( "name",  $workflowName );
-                    if ( $workflowTypeString )
-                    {
-                        $workflow->setAttribute( "workflow_type_string",  $workflowTypeString );
-                    }
                     $workflow->store();
                     $ingroup = eZWorkflowGroupLink::create( $workflow->attribute( "id" ), $workflow->attribute( "version" ), $WorkflowGroupID, $groupName );
                     $ingroup->store();
@@ -163,6 +158,14 @@ class eZCreateWorkflow extends eZXMLInstallerHandler
                         }
                     }
                 }
+
+                $workflow->setAttribute( "name",  $workflowName );
+                $workflow->setAttribute( "is_enabled",  true );
+                if ( $workflowTypeString )
+                {
+                    $workflow->setAttribute( "workflow_type_string",  $workflowTypeString );
+                }
+                $workflow->store();
 
                 $WorkflowID      = $workflow->attribute( "id" );
                 $WorkflowVersion = $workflow->attribute( "version" );
