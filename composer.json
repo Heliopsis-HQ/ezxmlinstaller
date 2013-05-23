@@ -1,0 +1,12 @@
+{
+    "name": "heliopsis/ezxmlinstaller",
+    "authors": [
+        {
+            "name": "Benjamin Choquet",
+            "email": "benjamin.choquet@heliopsis.net"
+        }
+    ],
+    "require": {
+
+    }
+}
