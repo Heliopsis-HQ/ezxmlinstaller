@@ -1,5 +1,5 @@
 {
-    "name": "heliopsis/legacy-ezxmlinstaller",
+    "name": "heliopsis/ezxmlinstaller",
     "type": "ezpublish-legacy-extension",
     "version": "1.0.0",
     "authors": [
@@ -8,15 +8,9 @@
             "email": "benjamin.choquet@heliopsis.net"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:Heliopsis-HQ/ezpublish-legacy-installer.git"
-        }  
-    ],
     "require": {
         "ezsystems/ezpublish-legacy": ">=5.1@dev",
-        "heliopsis/ezpublish-legacy-installer": "0.1.x"
+        "ezsystems/ezpublish-legacy-installer": "@dev"
     },
     "extra": {
         "branch-alias": {
